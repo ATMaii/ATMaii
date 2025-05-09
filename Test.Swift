@@ -1,3 +1,41 @@
+func calculateHandScore(hand: [Card], row: RowPosition) -> Int {
+    var score = 0
+
+    if isRoyalFlush(hand) {
+        score = 8
+        if row == .middle { score *= 2 }
+    } else if isStraightFlush(hand) {
+        score = 7
+        if row == .middle { score *= 2 }
+    } else if isFourOfAKind(hand) {
+        score = 6
+        if row == .middle { score *= 2 }
+    } else if isFullHouse(hand) {
+        score = 1
+        if row == .middle { 
+            score *= 2
+        }
+    } else if isFullHouseWithAce(hand) {
+        score = 2 // Full House A
+        if row == .middle { 
+            score *= 2 // คูณคะแนน ×2 เมื่อแถวกลาง
+        }
+    } else if isFlush(hand) || isStraight(hand) || isThreeOfAKind(hand) || isTwoPair(hand) || isPair(hand) {
+        score = 1
+    }
+
+    if row == .head {
+        if isThreeOfAKind(hand) {
+            score = 5 // หัวตอง
+        } else if isPairOfAces(hand) {
+            score = 2 // หัวคู่ A
+        }
+    }
+
+    return score
+}
+
+
 import SwiftUI
 
 struct GameView: View { @StateObject private var gameLogic = GameLogic(playerNames: ["Player 1", "Player 2", "Player 3", "Player 4"]) @State private var gameStarted = false @State private var timeRemaining = 120 @State private var timer: Timer? @State private var isGameOver = false @State private var isGameActive = true
