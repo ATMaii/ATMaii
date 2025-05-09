@@ -1,5 +1,28 @@
 import SwiftUI
 
+struct GameView: View { @StateObject private var gameLogic = GameLogic(playerNames: ["Player 1", "Player 2", "Player 3", "Player 4"]) @State private var gameStarted = false @State private var timeRemaining = 120 @State private var timer: Timer? @State private var isGameOver = false @State private var isGameActive = true
+
+var body: some View {
+    VStack {
+        Text("Game: 3กอง")
+            .font(.largeTitle)
+            .padding()
+
+        if !gameStarted {
+            Button("เริ่มเกม") {
+                gameLogic.startNewGame()
+                gameStarted = true
+                startTimer()
+            }
+            .padding()
+        }
+
+        if gameStarted && isGameActive {
+            Text("เวลาที่เหลือ:
+
+
+import SwiftUI
+
 // Define the card set and result for each player
 struct CardSet {
     var head: [String]
