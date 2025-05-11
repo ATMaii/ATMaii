@@ -59,8 +59,223 @@ struct Card: Identifiable, Equatable {
         return "\(rank.display)\(suit.rawValue)"
     }
 }
+// MARK: - Models
+
+import SwiftUI import Foundation
+
+enum Suit: String, CaseIterable { case hearts = "♥" case diamonds = "♦" case clubs = "♣" case spades = "♠" }
+
+enum Rank: Int, CaseIterable, Comparable { case two = 2, three, four, five, six, seven, eight, nine, ten case jack = 11, queen, king, ace = 14
+
+var display: String {
+    switch self {
+    case .jack: return "J"
+    case .queen: return "Q"
+    case .king: return "K"
+    case .ace: return "A"
+    default: return String(self.rawValue)
+    }
+}
+
+static func < (lhs: Rank, rhs: Rank) -> Bool {
+    return lhs.rawValue < rhs.rawValue
+}
+
+}
+
+struct Card: Identifiable, Equatable { let id = UUID() let suit: Suit let rank: Rank
+
+var display: String {
+    return "
+
 
 // MARK: - Views
+
+// MARK: - Views
+
+struct GameView: View {
+    @StateObject private var gameLogic = GameLogic(playerNames: ["Player 1", "Player 2", "Player 3", "Player 4"])
+    @State private var gameStarted = false
+    @State private var isGameOver = false
+    @State private var isGameActive = true
+    @State private var timeRemaining = 120
+    @State private var timer: Timer?
+
+    var body: some View {
+        VStack {
+            Text("Game: 3กอง")
+                .font(.largeTitle)
+                .padding()
+
+            if !gameStarted {
+                Button("เริ่มเกม") {
+                    gameLogic.startNewGame()
+                    gameStarted = true
+                    startTimer()
+                }
+                .padding()
+            }
+
+            if gameStarted && isGameActive {
+                let player3 = gameLogic.players[2] // ผู้เล่นหลัก
+
+                VStack(spacing: 40) {
+                    // แถวหัว (3 ช่อง)
+                    CardRowView(title: "หัว", cards: player3.headCards)
+                        .onDrop(of: [UTType.text], isTargeted: nil) { providers in
+                            handleDrop(providers: providers, target: .head)
+                        }
+
+                    // แถวกลาง (5 ช่อง)
+                    CardRowView(title: "กลาง", cards: player3.middleCards)
+                        .onDrop(of: [UTType.text], isTargeted: nil) { providers in
+                            handleDrop(providers: providers, target: .middle)
+                        }
+
+                    // แถวท้าย (5 ช่อง)
+                    CardRowView(title: "ท้าย", cards: player3.tailCards)
+                        .onDrop(of: [UTType.text], isTargeted: nil) { providers in
+                            handleDrop(providers: providers, target: .tail)
+                        }
+
+                    Divider()
+
+                    // ไพ่ที่ยังไม่ได้จัด
+                    Text("ไพ่ของคุณ")
+                        .font(.headline)
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(player3.unarrangedCards, id: \.id) { card in
+                                DraggableCard(card: card)
+                                    .gesture(dragGesture(for: card))
+                            }
+                        }
+                        .padding()
+                    }
+
+                    Button("เสร็จแล้ว") {
+                        // บันทึกการจัดไพ่
+                        isGameActive = false
+                        isGameOver = true
+                        timer?.invalidate()
+                    }
+                    .padding(.top)
+                }
+                .padding()
+
+                Text("เวลาที่เหลือ:
+
+    // เพิ่ม DropArea สำหรับแถว
+struct DropArea: View {
+    let title: String
+    @Binding var cards: [Card]
+
+    var body: some View {
+        VStack {
+            Text(title)
+                .font(.title2)
+                .padding(.bottom, 8)
+            ZStack {
+                Rectangle()
+                    .fill(Color.gray.opacity(0.2))
+                    .frame(height: 100)
+                    .border(Color.black, width: 1)
+                VStack {
+                    ForEach(cards, id: \.id) { card in
+                        Text(card.display)
+                            .padding()
+                            .background(Color.white)
+                            .cornerRadius(8)
+                            .shadow(radius: 2)
+                    }
+                }
+            }
+        }
+        .onDrop(of: [.text], isTargeted: nil) { providers in
+            // ดึงข้อมูลเมื่อไพ่ถูกวาง
+            if let item = providers.first {
+                item.loadObject(ofClass: NSString.self) { (string, error) in
+                    if let cardString = string as? String {
+                        // สร้างไพ่จาก string
+                        if let card = createCard(from: cardString) {
+                            cards.append(card)
+                        }
+                    }
+                }
+            }
+            return true
+        }
+    }
+
+    private func createCard(from string: String) -> Card? {
+        // ทำการแยก suit และ rank จาก string เพื่อสร้างไพ่
+        if let rank = Rank.allCases.first(where: { $0.display == String(string.prefix(1)) }),
+           let suit = Suit.allCases.first(where: { string.contains($0.rawValue) }) {
+            return Card(suit: suit, rank: rank)
+        }
+        return nil
+    }
+}
+
+// ใน GameView: แสดง DropArea แทนที่ Dragging
+struct GameView: View {
+    @StateObject private var gameLogic = GameLogic(playerNames: ["Player 1", "Player 2", "Player 3", "Player 4"])
+    @State private var gameStarted = false
+    @State private var isGameOver = false
+    @State private var isGameActive = true
+    @State private var timeRemaining = 120
+    @State private var timer: Timer?
+
+    var body: some View {
+        VStack {
+            Text("Game: 3กอง")
+                .font(.largeTitle)
+                .padding()
+
+            if !gameStarted {
+                Button("เริ่มเกม") {
+                    gameLogic.startNewGame()
+                    gameStarted = true
+                    startTimer()
+                }
+                .padding()
+            }
+
+            if gameStarted && isGameActive {
+                let player3 = gameLogic.players[2] // ผู้เล่นหลัก
+
+                VStack(spacing: 40) {
+                    // ใช้ DropArea แทนที่ CardRowView
+                    DropArea(title: "หัว", cards: $gameLogic.players[2].headCards)
+                    DropArea(title: "กลาง", cards: $gameLogic.players[2].middleCards)
+                    DropArea(title: "ท้าย", cards: $gameLogic.players[2].tailCards)
+
+                    Divider()
+
+                    // ไพ่ที่ยังไม่ได้จัด
+                    Text("ไพ่ของคุณ")
+                        .font(.headline)
+                    ScrollView(.horizontal) {
+                        HStack {
+                            ForEach(player3.unarrangedCards, id: \.id) { card in
+                                DraggableCard(card: card)
+                                    .gesture(dragGesture(for: card))
+                            }
+                        }
+                        .padding()
+                    }
+
+                    Button("เสร็จแล้ว") {
+                        // บันทึกการจัดไพ่
+                        isGameActive = false
+                        isGameOver = true
+                        timer?.invalidate()
+                    }
+                    .padding(.top)
+                }
+                .padding()
+
+                Text("เวลาที่เหลือ:
 
 struct GameView: View {
     @StateObject private var gameLogic = GameLogic(playerNames: ["Player 1", "Player 2", "Player 3", "Player 4"])
