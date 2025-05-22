@@ -1,3 +1,25 @@
+
+<key>CFBundleURLTypes</key>
+<array>
+  <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+      <string>fb{YourAppID}</string>
+    </array>
+  </dict>
+</array>
+<key>FacebookAppID</key>
+<string>{YourAppID}</string>
+<key>FacebookDisplayName</key>
+<string>{YourDisplayName}</string>
+<key>LSApplicationQueriesSchemes</key>
+<array>
+  <string>fbapi</string>
+  <string>fb-messenger-api</string>
+  <string>fbauth2</string>
+  <string>fbshareextension</string>
+</array>
+
 // MARK: - Models
 
 import SwiftUI
