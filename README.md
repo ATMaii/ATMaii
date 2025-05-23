@@ -6,41 +6,6 @@
 - 😄 Pronouns: ... 
 - ⚡ Fun fact: ... Ummmm
 
-import SwiftUI
-
-struct ContentView: View {
-    @State private var isLightOn = true
-
-    var body: some View {
-        ZStack {
-            // พื้นหลังห้อง
-            Color(isLightOn ? .white : .black)
-                .animation(.easeInOut, value: isLightOn)
-                .edgesIgnoringSafeArea(.all)
-
-            VStack(spacing: 40) {
-                // หลอดไฟ
-                Image(systemName: "lightbulb.fill")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100, height: 100)
-                    .foregroundColor(isLightOn ? .yellow : .gray)
-                    .animation(.easeInOut(duration: 0.5), value: isLightOn)
-
-                // ปุ่มเปิด/ปิดไฟ
-                Button(action: {
-                    isLightOn.toggle()
-                }) {
-                    Text(isLightOn ? "Turn Off Light" : "Turn On Light")
-                        .padding()
-                        .background(.blue)
-                        .foregroundColor(.white)
-                        .clipShape(Capsule())
-                }
-            }
-        }
-    }
-}
 
 <!---
 ATMaii/ATMaii is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
