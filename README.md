@@ -6,12 +6,6 @@
 - 😄 Pronouns: ... 
 - ⚡ Fun fact: ... Ummmm
 
-
-<!---
-ATMaii/ATMaii is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
-You can click the Preview link to take a look at your changes.
---->
-
 import SwiftUI
 
 struct DeclarativeView: View {
@@ -35,3 +29,8 @@ struct DeclarativeView_Previews: PreviewProvider {
         DeclarativeView()
     }
 }
+
+<!---
+ATMaii/ATMaii is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
+You can click the Preview link to take a look at your changes.
+--->
